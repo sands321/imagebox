@@ -21,6 +21,17 @@
       "type": "node",
       "sourceMaps": true,
       "timeout": 60000
+    },
+    {
+      "name": "rp1",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "timeout": 30000,
+      "sourceMaps": true,
+      "restart": false
+      // "url": "http://localhost:3000/main_window"
     }
   ]
 }
