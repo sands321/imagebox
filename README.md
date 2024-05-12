@@ -4,6 +4,11 @@
 
 # Usage
 
+1. ⌘+v to save image to ImageBox
+2. select image and press ⌘+c to copy image from ImageBox
+
+# Install
+
 1. compile: yarn package
 2. open app: ./out/xxx/ImageBox
 
