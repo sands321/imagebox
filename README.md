@@ -4,14 +4,19 @@
 
 # Usage
 
-1. ⌘+v to save image to ImageBox
-2. select image and press ⌘+c to copy image from ImageBox
+- ⌘+v to save image to ImageBox
+- select image and press ⌘+c to copy image from ImageBox
 
 # Install
 
-1. compile: yarn;yarn package
-2. open app: ./out/xxx/ImageBox
+- compile: yarn;yarn package
+- open app: ./out/xxx/ImageBox
 
 # DEMO
 
 ![image](https://github.com/sands321/imagebox/blob/master/screenshots/demo.png)
+
+# Contact:
+
+- WeChat：zhucheng798
+- ZhiHu: [星辰](https://www.zhihu.com/people/xing-chen-78-84)
