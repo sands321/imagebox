@@ -14,6 +14,18 @@ import { rendererConfig } from "./webpack.renderer.config";
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    icon: "./build/icon",
+    // osxSign: {
+    //   //无效id略过签名(空串不行)
+    //   identity: "xxx",
+    //   identityValidation: false,
+    //   optionsForFile: () => {
+    //     return {
+    //       entitlements: "./build/entitlements.mac.plist",
+    //       hardenedRuntime: false,
+    //     };
+    //   },
+    // },
   },
   rebuildConfig: {},
   makers: [

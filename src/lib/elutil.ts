@@ -164,6 +164,7 @@ end tell
     }
     fs.writeFileSync(tmpF, code);
     const cmd = `osascript "${tmpF}"`;
+
     exec(cmd, (error, stdout, stderr) => {
       if (error) {
         console.error(`elutil>>setImg2App,error:${error}`);
