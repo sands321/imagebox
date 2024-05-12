@@ -9,7 +9,7 @@
 
 # Install
 
-1. compile: yarn package
+1. compile: yarn;yarn package
 2. open app: ./out/xxx/ImageBox
 
 # DEMO
