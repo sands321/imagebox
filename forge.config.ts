@@ -15,6 +15,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: "./build/icon",
+    appBundleId: "com.sands.imagebox",
     // osxSign: {
     //   //无效id略过签名(空串不行)
     //   identity: "xxx",
