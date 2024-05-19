@@ -12,5 +12,15 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  //---
+  "settings": {
+    "import/resolver": {
+      //@models需,否则eslint报错resolve不到
+      "alias": {
+        "map": [["@models", "./src/lib/models"]],
+        "extensions": [".ts", ".js", ".jsx", ".json"]
+      }
+    }
+  }
 }

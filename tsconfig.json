@@ -13,8 +13,12 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "paths": {
+      "@models/*": ["src/lib/models/*"],
       "*": ["node_modules/*"]
-    }
+    },
+    //sequelize-typescript注解需
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*"]
 }

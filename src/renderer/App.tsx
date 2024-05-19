@@ -22,8 +22,9 @@ function App() {
   const [snackMsg, setSnackMsg] = React.useState("");
   const [selImg, setSelImg] = React.useState<string | null>(null);
 
-  const refreshImgs = () => {
-    const tmpLs = ElUtil.getImages();
+  const refreshImgs = async () => {
+    // const tmpLs = ElUtil.getImages();
+    const tmpLs = await rpc.sendSync("getImages");
     setLsImg(tmpLs);
   };
 
@@ -87,8 +88,9 @@ function App() {
   };
 
   const onClickBtn1 = () => {
-    const ts = Date.now();
-    ElUtil.saveClipboardImage(`box/${ts}.png`);
+    // const ts = Date.now();
+    // ElUtil.saveClipboardImage(`box/${ts}.png`);
+    rpc.send("syncDb");
   };
 
   return (
