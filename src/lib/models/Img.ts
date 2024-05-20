@@ -1,6 +1,6 @@
 import { Column, Table, Model, DataType } from "sequelize-typescript";
 
-@Table({ tableName: "imgs" })
+@Table({ tableName: "imgs", timestamps: false })
 export class Img extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   path!: string;
@@ -10,4 +10,10 @@ export class Img extends Model {
 
   @Column({ type: DataType.STRING })
   tags?: string;
+
+  @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
+  createAt?: Date;
+
+  @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
+  updatedAt?: Date;
 }

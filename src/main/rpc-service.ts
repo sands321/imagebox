@@ -2,6 +2,7 @@ import { app, clipboard, ipcMain, nativeImage } from "electron";
 import { ElUtil } from "../lib/elutil";
 import { Img } from "@models/index";
 import { db } from "../lib/db";
+import fs from "fs";
 
 export function initRpc() {
   console.log("rpcs>>init");
@@ -47,7 +48,9 @@ ipcMain.on("syncDb", (event) => {
   const ls = ElUtil.getImages();
   Img.bulkCreate(
     ls.map((v) => {
-      return { path: v };
+      const ts = fs.statSync(v).birthtime;
+      return { path: v, createAt: ts, updatedAt: ts };
+      // return { path: v, createAt: new Date("2020-01-01") };
     })
   );
   console.log(`rpcs>>syncDb,ls:${ls.length}`);
@@ -57,4 +60,18 @@ ipcMain.on("syncDb", (event) => {
 ipcMain.on("getImages", async (event) => {
   console.log("rpcs>>getImages");
   event.returnValue = await db.getImages();
+});
+
+ipcMain.on("saveCbImg", async (event) => {
+  const fullPath = await ElUtil.saveClipboardImage();
+  //渲染进程不能import db,函数内import也不行
+  await db.saveImage(fullPath);
+  event.returnValue = null;
+});
+
+ipcMain.on("delImg", async (event, path: string) => {
+  ElUtil.removeImage(path);
+  await db.delImage(path);
+  console.log(`rpcs>>delImg,path:${path}`);
+  event.returnValue = null;
 });

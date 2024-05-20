@@ -92,7 +92,10 @@ export class ElUtil {
     return reg.test(str);
   }
 
-  static async saveClipboardImage(relPath: string) {
+  static async saveClipboardImage() {
+    const ts = Date.now();
+    const relPath = `box/${ts}.png`;
+    const fullPath = path.resolve(this.userDir, relPath);
     if (!this.userDir) {
       console.error("userDir is null");
       return;
@@ -100,13 +103,12 @@ export class ElUtil {
     const image = clipboard.readImage();
     if (!image.isEmpty()) {
       const buffer = image.toPNG();
-      const f1 = path.resolve(this.userDir, relPath);
-      const d1 = path.dirname(f1);
+      const d1 = path.dirname(fullPath);
       if (!fs.existsSync(d1)) {
         fs.mkdirSync(d1, { recursive: true });
       }
       try {
-        fs.writeFileSync(f1, buffer);
+        fs.writeFileSync(fullPath, buffer);
       } catch (e) {
         console.error(`elutil>>saveClipboardImage,${e}`);
       }
@@ -116,6 +118,7 @@ export class ElUtil {
         await this.downImg(tmp);
       }
     }
+    return fullPath;
   }
 
   static getImages() {

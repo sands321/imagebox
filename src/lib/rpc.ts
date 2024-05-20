@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-
+/**
+ * 渲染进程使用
+ */
 import { ipcRenderer } from "electron";
 
 declare interface RPC {

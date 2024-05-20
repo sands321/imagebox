@@ -17,8 +17,20 @@ class Db {
   }
 
   async getImages() {
-    const imgs = await Img.findAll();
-    return imgs.map((v) => v.path);
+    const imgs = await Img.findAll({ order: [["createAt", "DESC"]] });
+    return imgs?.map((v) => v.path);
+  }
+
+  async saveImage(path: string) {
+    await Img.create({ path });
+  }
+
+  async delImage(path: string) {
+    if (!path) {
+      console.error(`[db]delImage,path is null`);
+      return;
+    }
+    await Img.destroy({ where: { path } });
   }
 }
 export const db = new Db();

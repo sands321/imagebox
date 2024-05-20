@@ -59,8 +59,7 @@ function App() {
           setSnackMsg("No image in clipboard! 😭");
           return;
         }
-        const ts = Date.now();
-        await ElUtil.saveClipboardImage(`box/${ts}.png`);
+        rpc.sendSync("saveCbImg");
         refreshImgs();
       } else if (event.metaKey && event.key === "Backspace") {
         console.log(`del>>${selImg}`);
@@ -69,7 +68,7 @@ function App() {
           setSnackMsg("No image selected! 😭");
           return;
         }
-        ElUtil.removeImage(selImg);
+        rpc.sendSync("delImg", selImg);
         refreshImgs();
       }
     };
@@ -85,6 +84,11 @@ function App() {
     console.log(`dbclick>>${item}`);
     rpc.sendSync("setCbImg", item);
     ElUtil.setImg2App(item);
+  };
+
+  const onClickImg = (item: string) => {
+    setSelImg(item);
+    console.log(`click>>${item}`);
   };
 
   const onClickBtn1 = () => {
@@ -131,7 +135,7 @@ function App() {
                 // background: "red",
                 border: selImg === item ? "1px solid #f00" : "none",
               }}
-              onClick={() => setSelImg(item)}
+              onClick={() => onClickImg(item)}
               onDoubleClick={() => onDbClickImg(item)}
             >
               <Box
