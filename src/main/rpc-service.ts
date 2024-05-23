@@ -69,6 +69,11 @@ ipcMain.on("saveCbImg", async (event) => {
   event.returnValue = null;
 });
 
+ipcMain.on("updateImg", async (event, img: any) => {
+  await Img.update(img, { where: { path: img.path } });
+  event.returnValue = null;
+});
+
 ipcMain.on("delImg", async (event, path: string) => {
   ElUtil.removeImage(path);
   await db.delImage(path);

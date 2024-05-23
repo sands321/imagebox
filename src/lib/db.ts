@@ -16,9 +16,11 @@ class Db {
     console.log("[db]sync ok");
   }
 
+  //仅返回数据对象
   async getImages() {
     const imgs = await Img.findAll({ order: [["createAt", "DESC"]] });
-    return imgs?.map((v) => v.path);
+    // return imgs?.map((v) => v.path);
+    return imgs.map((x) => x.dataValues);
   }
 
   async saveImage(path: string) {

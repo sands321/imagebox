@@ -60,10 +60,11 @@ export class ElUtil {
     return false;
   }
 
-  static async downImg(url: string) {
+  static async downImg(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const fname = Date.now().toString();
-      const suffix = url.match(/\.(png|jpe?g|gif|webp)$/i)?.[1] || "png";
+      const suffix =
+        new URL(url).pathname?.match(/\.(png|jpe?g|gif|webp)$/i)?.[1] || "png";
       const f1 = path.resolve(this.userDir, `box/${fname}.${suffix}`);
       //1.禁referer>>https://pic.diydoutu.com/bq/2426.gif
       fetch(url, { referrerPolicy: "no-referrer" })
@@ -95,7 +96,7 @@ export class ElUtil {
   static async saveClipboardImage() {
     const ts = Date.now();
     const relPath = `box/${ts}.png`;
-    const fullPath = path.resolve(this.userDir, relPath);
+    let fullPath = path.resolve(this.userDir, relPath);
     if (!this.userDir) {
       console.error("userDir is null");
       return;
@@ -115,7 +116,7 @@ export class ElUtil {
     } else {
       const tmp = clipboard.readText();
       if (this.isUrl(tmp)) {
-        await this.downImg(tmp);
+        fullPath = await this.downImg(tmp);
       }
     }
     return fullPath;

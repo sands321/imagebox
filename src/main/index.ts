@@ -37,9 +37,9 @@ const createWindow = (): void => {
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  if (Util.isDev) {
-    mainWindow.webContents.openDevTools();
-  }
+  // if (Util.isDev) {
+  //   mainWindow.webContents.openDevTools();
+  // }
 };
 
 // const partition = "persist:app";

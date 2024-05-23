@@ -6,6 +6,9 @@ export class Img extends Model {
   path!: string;
 
   @Column({ type: DataType.STRING })
+  title?: string;
+
+  @Column({ type: DataType.STRING })
   desc?: string;
 
   @Column({ type: DataType.STRING })
