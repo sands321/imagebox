@@ -10,6 +10,9 @@ export const mainConfig: Configuration = {
   module: {
     rules,
   },
+  externals: {
+    "pg-hstore": "commonjs pg-hstore",
+  },
   plugins,
   resolve: {
     extensions: [".js", ".ts", ".jsx", ".tsx", ".css", ".json"],

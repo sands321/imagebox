@@ -13,7 +13,10 @@ import { rendererConfig } from "./webpack.renderer.config";
 
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
+    asar: {
+      //默认:'**/*.node'
+      // unpack: "**",
+    },
     icon: "./build/icon",
     appBundleId: "com.sands.imagebox",
     // osxSign: {

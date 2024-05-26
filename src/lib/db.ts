@@ -2,10 +2,14 @@ import { Sequelize } from "sequelize-typescript";
 import path from "path";
 import { app } from "electron";
 import { Img } from "@models/index";
+import sqlite3 from "sqlite3";
 
 //表默认含:id,createdAt,updatedAt
 export const sequelize = new Sequelize({
   dialect: "sqlite",
+  //1.若无打包时报错:Please install sqlite3 package manually
+  //2.未引用sqlite3时,打包时不拷贝node_sqlite3.node
+  dialectModule: sqlite3,
   storage: path.resolve(app.getPath("userData"), "db.sqlite"),
   models: [Img],
 });
