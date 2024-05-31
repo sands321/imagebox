@@ -26,5 +26,8 @@
   "editor.formatOnType": true,
   "editor.formatOnSave": true,
   "less.validate": false,
-  "scss.validate": false
+  "scss.validate": false,
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  }
 }

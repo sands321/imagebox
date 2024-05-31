@@ -3,6 +3,7 @@ import path from "path";
 import { app } from "electron";
 import { Img } from "@models/index";
 import sqlite3 from "sqlite3";
+import { Util } from "./util";
 
 //表默认含:id,createdAt,updatedAt
 export const sequelize = new Sequelize({
@@ -24,6 +25,9 @@ class Db {
   async getImages() {
     const imgs = await Img.findAll({ order: [["createAt", "DESC"]] });
     // return imgs?.map((v) => v.path);
+    // if (Util.isDev) {
+    //   return [];
+    // }
     return imgs.map((x) => x.dataValues);
   }
 

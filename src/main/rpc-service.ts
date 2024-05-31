@@ -43,6 +43,12 @@ ipcMain.on("setCbImg", (event, url: string) => {
   event.returnValue = null;
 });
 
+ipcMain.on("setCbText", (event, url: string) => {
+  console.log(`rpcs>>setCbText,url:${url}`);
+  clipboard.writeText(url);
+  event.returnValue = null;
+});
+
 ipcMain.on("syncDb", (event) => {
   console.log("rpcs>>syncDb");
   const ls = ElUtil.getImages();

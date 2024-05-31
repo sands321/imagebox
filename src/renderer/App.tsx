@@ -47,7 +47,6 @@ function MyCustomAutoFocusPlugin(): JSX.Element {
 
 function App() {
   const hasRun = useRef(false);
-  const [img, setImg] = React.useState<string | null>(null);
   const [lsImg, setLsImg] = React.useState<Img[]>([]);
   const [snackMsg, setSnackMsg] = React.useState("");
   const [selImg, setSelImg] = React.useState<string | null>(null);
@@ -72,7 +71,11 @@ function App() {
     // hasRun.current = true;
     console.log(`app>>init,useEffect`);
     const handleKeyDown = async (event: KeyboardEvent) => {
-      console.log(`keydown>>${event.key},meta:${event.metaKey}`);
+      //event.key在opt按下时会变,如c变ç
+      const code = event.code;
+      console.log(
+        `keydown>>key:${event.key},code:${event.code},meta:${event.metaKey},alt:${event.altKey}`
+      );
       const focusEl = document.activeElement.nodeName;
       //保存元数据
       if (event.metaKey && event.key === "s") {
@@ -87,17 +90,34 @@ function App() {
       if (focusEl !== "BODY") {
         return;
       }
+      //拷贝路径
+      if (event.metaKey && event.altKey && code === "KeyC") {
+        if (!selImg) {
+          setSnackMsg("No image selected! 😭");
+          return;
+        }
+        rpc.send("setCbText", selImg);
+        setSnackMsg("Path copied! ❤️");
+      } else if (event.metaKey && event.altKey && code === "KeyR") {
+        //open finder
+        if (!selImg) {
+          setSnackMsg("No image selected! 😭");
+          return;
+        }
+        exec(`open -R "${selImg}"`);
+      }
       //拷贝图片
-      if (event.metaKey && event.key === "c") {
+      else if (event.metaKey && code === "KeyC") {
         if (!selImg) {
           setSnackMsg("No image selected! 😭");
           return;
         }
         rpc.send("setCbImg", selImg);
         // ElUtil.setClipboardImage(selImg);
+        setSnackMsg("Image copied! ❤️");
       }
       //保存图片
-      else if (event.metaKey && event.key === "v") {
+      else if (event.metaKey && code === "KeyV") {
         if (!ElUtil.hasClipboardImage()) {
           setSnackMsg("No image in clipboard! 😭");
           return;
@@ -106,7 +126,7 @@ function App() {
         refreshImgs();
       }
       //删
-      else if (event.metaKey && event.key === "Backspace") {
+      else if (event.metaKey && code === "Backspace") {
         console.log(`del>>${selImg}`);
         // onDelImg();
         if (!selImg) {
@@ -115,6 +135,8 @@ function App() {
         }
         rpc.sendSync("delImg", selImg);
         refreshImgs();
+      } else if (code === "Escape") {
+        setSelImg(null);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -130,7 +152,7 @@ function App() {
     // rpc.sendSync("setCbImg", item);
     // ElUtil.setImg2App(item);
     //open in app
-    exec(`open -a "Preview" ${item}`);
+    exec(`open -a "Preview" "${item}"`);
   };
 
   const onClickImg = (item: Img) => {
@@ -173,6 +195,7 @@ function App() {
               background: "#efee",
               mt: 3,
               pb: 30,
+              // visibility: lsImg.length ? "visible" : "hidden",
             }}
             cols={11}
             rowHeight={100}
@@ -242,6 +265,30 @@ function App() {
           </ImageList>
         </Box>
 
+        {/* 空页面提示 */}
+        <Box
+          sx={{
+            position: "absolute",
+            // textAlign: "center",
+            // alignContent: "center",
+            // background: "red",
+            top: 110,
+            // bottom: 0,
+            // left: 0,
+            // right: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            visibility: lsImg.length ? "hidden" : "visible",
+            color: "#333",
+          }}
+        >
+          <Box>⌘+C: Copy image</Box>
+          <Box>⌘+V: Add image</Box>
+          <Box>⌘+⌥+C: Copy image path</Box>
+          <Box>⌘+⌥+R: Show image in finder</Box>
+          <Box>⌘+S: Save metadata</Box>
+        </Box>
+
         {/* 元数据 */}
         <Card
           sx={{
@@ -251,6 +298,7 @@ function App() {
             position: "absolute",
             bottom: 4,
             zIndex: 2,
+            visibility: selImg ? "visible" : "hidden",
           }}
         >
           <Stack direction="row" spacing={2}>
@@ -291,41 +339,54 @@ function App() {
           <TextField
             fullWidth
             sx={{ background: "red", visibility: "hidden" }}
-            InputProps={{
-              inputComponent: ({ inputRef, ...otherProps }) => (
-                <div
-                  ref={inputRef}
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    borderRadius: "4px",
-                    minHeight: "100px",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  <LexicalComposer
-                    initialConfig={{
-                      namespace: "my-editor",
-                      onError: (e) => {
-                        console.log(e);
-                      },
-                    }}
-                  >
-                    <PlainTextPlugin
-                      contentEditable={<ContentEditable />}
-                      placeholder={<div>Enter some text...</div>}
-                      ErrorBoundary={LexicalErrorBoundary}
-                    />
-                    <OnChangePlugin onChange={onChangeDesc} />
-                    <HistoryPlugin />
-                    {/* <MyCustomAutoFocusPlugin /> */}
-                  </LexicalComposer>
-                </div>
-              ),
-            }}
+            // InputProps={{
+            //   inputComponent: ({ inputRef }) => (
+            //     <div
+            //       ref={inputRef}
+            //       style={{
+            //         border: "1px solid #ccc",
+            //         padding: "10px",
+            //         borderRadius: "4px",
+            //         minHeight: "100px",
+            //         width: "100%",
+            //         height: "100%",
+            //       }}
+            //     >
+            //       <LexicalComposer
+            //         initialConfig={{
+            //           namespace: "my-editor",
+            //           onError: (e) => {
+            //             console.log(e);
+            //           },
+            //         }}
+            //       >
+            //         <PlainTextPlugin
+            //           contentEditable={<ContentEditable />}
+            //           placeholder={<div>Enter some text...</div>}
+            //           ErrorBoundary={LexicalErrorBoundary}
+            //         />
+            //         <OnChangePlugin onChange={onChangeDesc} />
+            //         <HistoryPlugin />
+            //         {/* <MyCustomAutoFocusPlugin /> */}
+            //       </LexicalComposer>
+            //     </div>
+            //   ),
+            // }}
           />
         </Card>
+
+        <Box
+          sx={{
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            m: 1,
+            fontSize: 12,
+            color: "#333",
+          }}
+        >
+          {lsImg.length}
+        </Box>
 
         {/* 全局组件---- */}
         <Snackbar
